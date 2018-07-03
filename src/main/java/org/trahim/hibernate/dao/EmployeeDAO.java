@@ -1,6 +1,8 @@
-package org.trahim.dao;
+package org.trahim.hibernate.dao;
 
-import org.trahim.entity.Employee;
+
+
+import org.trahim.hibernate.entity.Employee;
 
 import java.sql.SQLException;
 import java.util.List;

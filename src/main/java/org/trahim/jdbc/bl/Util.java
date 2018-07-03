@@ -1,4 +1,4 @@
-package org.trahim.bl;
+package org.trahim.jdbc.bl;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

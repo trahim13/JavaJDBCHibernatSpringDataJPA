@@ -1,4 +1,4 @@
-package org.trahim.entity;
+package org.trahim.jdbc.entity;
 
 import java.util.Objects;
 

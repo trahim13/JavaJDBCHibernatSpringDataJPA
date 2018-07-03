@@ -1,8 +1,8 @@
-package org.trahim.service;
+package org.trahim.jdbc.service;
 
-import org.trahim.bl.Util;
-import org.trahim.dao.EmployeeDAO;
-import org.trahim.entity.Employee;
+import org.trahim.jdbc.bl.Util;
+import org.trahim.jdbc.dao.EmployeeDAO;
+import org.trahim.jdbc.entity.Employee;
 
 import java.sql.*;
 import java.util.ArrayList;

@@ -1,7 +1,6 @@
-package org.trahim.dao;
+package org.trahim.jdbc.dao;
 
-import org.trahim.entity.EmplProj;
-import org.trahim.entity.Project;
+import org.trahim.jdbc.entity.EmplProj;
 
 import java.sql.SQLException;
 import java.util.List;

@@ -1,12 +1,20 @@
-package org.trahim.entity;
+package org.trahim.hibernate.entity;
 
-import java.util.Objects;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "address", schema = "datajpa")
 public class Address {
+
+    @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "country")
     private String country;
+    @Column(name = "city")
     private String city;
+    @Column(name = "street")
     private String street;
+    @Column(name = "post_code", length = 10)
     private String postCode;
 
     public Address() {
@@ -50,24 +58,6 @@ public class Address {
 
     public void setPostCode(String postCode) {
         this.postCode = postCode;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Address address = (Address) o;
-        return id == address.id &&
-                Objects.equals(country, address.country) &&
-                Objects.equals(city, address.city) &&
-                Objects.equals(street, address.street) &&
-                Objects.equals(postCode, address.postCode);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(id, country, city, street, postCode);
     }
 
     @Override

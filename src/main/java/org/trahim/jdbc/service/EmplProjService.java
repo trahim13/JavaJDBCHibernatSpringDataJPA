@@ -1,28 +1,28 @@
-package org.trahim.service;
+package org.trahim.jdbc.service;
 
-import org.trahim.bl.Util;
-import org.trahim.dao.ProjectDAO;
-import org.trahim.entity.Project;
+import org.trahim.jdbc.bl.Util;
+import org.trahim.jdbc.dao.EmplProjDAO;
+import org.trahim.jdbc.entity.EmplProj;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectService extends Util implements ProjectDAO {
+public class EmplProjService extends Util implements EmplProjDAO {
 
     private Connection connection = getConnection();
 
     @Override
-    public void add(Project project) throws SQLException {
+    public void add(EmplProj emplProj) throws SQLException {
         PreparedStatement preparedStatement = null;
 
-        String sql = "INSERT INTO project (id, title) VALUES(?, ?)";
+        String sql = "INSERT INTO empl_proj (employee_id, project_id) VALUES(?, ?)";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, project.getId());
-            preparedStatement.setString(2, project.getTitle());
+            preparedStatement.setInt(1, emplProj.getEmployeeId());
+            preparedStatement.setInt(2, emplProj.getProjectId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -38,10 +38,10 @@ public class ProjectService extends Util implements ProjectDAO {
     }
 
     @Override
-    public List<Project> getAll() throws SQLException {
-        List<Project> projectList = new ArrayList<>();
+    public List<EmplProj> getAll() throws SQLException {
+        List<EmplProj> emplProjList = new ArrayList<>();
 
-        String sql = "SELECT ID, TITLE FROM PROJECT";
+        String sql = "SELECT * FROM EMPL_PROJ";
 
         Statement statement = null;
         try {
@@ -50,11 +50,11 @@ public class ProjectService extends Util implements ProjectDAO {
             ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
-                Project project = new Project();
-                project.setId(resultSet.getInt("id"));
-                project.setTitle(resultSet.getString("title"));
+                EmplProj emplProj = new EmplProj();
+                emplProj.setEmployeeId(resultSet.getInt("employee_id"));
+                emplProj.setProjectId(resultSet.getInt("project_id"));
 
-                projectList.add(project);
+                emplProjList.add(emplProj);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,24 +66,24 @@ public class ProjectService extends Util implements ProjectDAO {
                 connection.close();
             }
         }
-        return projectList;
+        return emplProjList;
     }
 
     @Override
-    public Project getById(int id) throws SQLException {
+    public EmplProj getByEmployeeIdAndProjectId(int employeeId, int projectId) throws SQLException {
         PreparedStatement preparedStatement = null;
 
-        String sql = "SELECT * FROM PROJECT WHERE id=?";
-
-        Project project = new Project();
+        String sql = "SELECT * FROM empl_proj WHERE employee_id=? AND project_id=?";
+        EmplProj emplProj = new EmplProj();
         try {
             preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setLong(1, id);
+            preparedStatement.setLong(1, employeeId);
+            preparedStatement.setLong(2, projectId);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            project.setId(resultSet.getInt("id"));
-            project.setTitle(resultSet.getString("title"));
+            emplProj.setEmployeeId(resultSet.getInt("employee_id"));
+            emplProj.setProjectId(resultSet.getInt("project_id"));
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -96,20 +96,20 @@ public class ProjectService extends Util implements ProjectDAO {
                 connection.close();
             }
         }
-        return project;
+        return emplProj;
     }
 
     @Override
-    public void update(Project project) throws SQLException {
+    public void update(EmplProj emplProj) throws SQLException {
         PreparedStatement preparedStatement = null;
 
-        String sql = "UPDATE project SET title=? WHERE id=?";
+        String sql = "UPDATE empl_proj SET employee_id=?, project_id=?";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setString(1, project.getTitle());
-            preparedStatement.setInt(2, project.getId());
+            preparedStatement.setInt(1, emplProj.getEmployeeId());
+            preparedStatement.setInt(2, emplProj.getProjectId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -125,15 +125,16 @@ public class ProjectService extends Util implements ProjectDAO {
     }
 
     @Override
-    public void remove(Project project) throws SQLException {
+    public void remove(EmplProj emplProj) throws SQLException {
         PreparedStatement preparedStatement = null;
 
-        String sql = "DELETE FROM project WHERE id=?";
+        String sql = "DELETE FROM empl_proj WHERE employee_id=? AND project_id=?";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, project.getId());
+            preparedStatement.setInt(1, emplProj.getEmployeeId());
+            preparedStatement.setInt(2, emplProj.getProjectId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -147,5 +148,4 @@ public class ProjectService extends Util implements ProjectDAO {
             }
         }
     }
-
 }

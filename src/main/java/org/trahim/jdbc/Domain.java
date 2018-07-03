@@ -1,6 +1,6 @@
-package org.trahim;
+package org.trahim.jdbc;
 
-import org.trahim.bl.Util;
+import org.trahim.jdbc.bl.Util;
 
 public class Domain {
     public static void main(String[] args) {

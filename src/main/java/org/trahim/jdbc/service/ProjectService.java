@@ -1,38 +1,33 @@
-package org.trahim.service;
+package org.trahim.jdbc.service;
 
-import org.trahim.bl.Util;
-import org.trahim.dao.AddressDAO;
-import org.trahim.entity.Address;
+import org.trahim.jdbc.bl.Util;
+import org.trahim.jdbc.dao.ProjectDAO;
+import org.trahim.jdbc.entity.Project;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddressService extends Util implements AddressDAO {
+public class ProjectService extends Util implements ProjectDAO {
 
-    Connection connection = getConnection();
+    private Connection connection = getConnection();
 
     @Override
-    public void add(Address address) throws SQLException {
-
+    public void add(Project project) throws SQLException {
         PreparedStatement preparedStatement = null;
-        String sql = "INSERT INTO address (id, country, city, street, post_code) VALUES (?,?,?,?,?)";
+
+        String sql = "INSERT INTO project (id, title) VALUES(?, ?)";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, address.getId());
-            preparedStatement.setString(2, address.getCountry());
-            preparedStatement.setString(3, address.getCity());
-            preparedStatement.setString(4, address.getStreet());
-            preparedStatement.setString(5, address.getPostCode());
+
+            preparedStatement.setInt(1, project.getId());
+            preparedStatement.setString(2, project.getTitle());
 
             preparedStatement.executeUpdate();
-
-
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-
+        } finally {
             if (preparedStatement != null) {
                 preparedStatement.close();
             }
@@ -43,10 +38,10 @@ public class AddressService extends Util implements AddressDAO {
     }
 
     @Override
-    public List<Address> getAll() throws SQLException {
-        List<Address> addressList = new ArrayList<>();
+    public List<Project> getAll() throws SQLException {
+        List<Project> projectList = new ArrayList<>();
 
-        String sql = "SELECT * FROM address";
+        String sql = "SELECT ID, TITLE FROM PROJECT";
 
         Statement statement = null;
         try {
@@ -55,14 +50,11 @@ public class AddressService extends Util implements AddressDAO {
             ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
-                Address address = new Address();
-                address.setId(resultSet.getInt("id"));
-                address.setCountry(resultSet.getString("country"));
-                address.setCity(resultSet.getString("city"));
-                address.setStreet(resultSet.getString("street"));
-                address.setPostCode(resultSet.getString("post_code"));
+                Project project = new Project();
+                project.setId(resultSet.getInt("id"));
+                project.setTitle(resultSet.getString("title"));
 
-                addressList.add(address);
+                projectList.add(project);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -74,27 +66,24 @@ public class AddressService extends Util implements AddressDAO {
                 connection.close();
             }
         }
-        return addressList;
+        return projectList;
     }
 
     @Override
-    public Address getById(int id) throws SQLException {
+    public Project getById(int id) throws SQLException {
         PreparedStatement preparedStatement = null;
 
-        String sql = "SELECT * FROM ADDRESS WHERE id=?";
+        String sql = "SELECT * FROM PROJECT WHERE id=?";
 
-        Address address = new Address();
+        Project project = new Project();
         try {
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setLong(1, id);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            address.setId(resultSet.getInt("id"));
-            address.setCountry(resultSet.getString("country"));
-            address.setCity(resultSet.getString("city"));
-            address.setStreet(resultSet.getString("street"));
-            address.setPostCode(resultSet.getString("post_code"));
+            project.setId(resultSet.getInt("id"));
+            project.setTitle(resultSet.getString("title"));
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -107,23 +96,20 @@ public class AddressService extends Util implements AddressDAO {
                 connection.close();
             }
         }
-        return address;
+        return project;
     }
 
     @Override
-    public void update(Address address) throws SQLException {
+    public void update(Project project) throws SQLException {
         PreparedStatement preparedStatement = null;
 
-        String sql = "UPDATE address SET country=?, city=?, street=?, post_code=? WHERE id=?";
+        String sql = "UPDATE project SET title=? WHERE id=?";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setString(1, address.getCountry());
-            preparedStatement.setString(2, address.getCity());
-            preparedStatement.setString(3, address.getStreet());
-            preparedStatement.setString(4, address.getPostCode());
-            preparedStatement.setInt(5, address.getId());
+            preparedStatement.setString(1, project.getTitle());
+            preparedStatement.setInt(2, project.getId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -136,19 +122,18 @@ public class AddressService extends Util implements AddressDAO {
                 connection.close();
             }
         }
-
     }
 
     @Override
-    public void remove(Address address) throws SQLException {
+    public void remove(Project project) throws SQLException {
         PreparedStatement preparedStatement = null;
 
-        String sql = "DELETE FROM address WHERE id=?";
+        String sql = "DELETE FROM project WHERE id=?";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, address.getId());
+            preparedStatement.setInt(1, project.getId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -161,6 +146,6 @@ public class AddressService extends Util implements AddressDAO {
                 connection.close();
             }
         }
-
     }
+
 }
